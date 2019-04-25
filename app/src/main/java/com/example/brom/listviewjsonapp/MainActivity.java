@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
             try {
                 JSONArray Jimmyarray = new JSONArray(o);
-                for(int i=0; i <9; i++) {
+                for(int i=0; i < Jimmyarray.length(); i++) {
                     Log.d("brom", "element 0:" + Jimmyarray.get(i).toString());
                 }
             } catch (JSONException e) {
