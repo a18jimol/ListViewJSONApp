@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,14 +48,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+
+        new FetchData().execute();
         // Ger listData värdet av arrayen mountainNames
         listData=new ArrayList<>(Arrays.asList(mountainNames));
         adapter=new ArrayAdapter<String>(this,R.layout.list_item_textview,R.id.list_item_textview, listData);
 
         // kopplar arrayen med listView
-        ListView my_listview=(ListView) findViewById(R.id.my_listview);
+       /* ListView my_listview=(ListView) findViewById(R.id.my_listview);
         my_listview.setAdapter(adapter);
 
         my_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         + mountainHeights[i];
                 Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -134,6 +138,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d("brom","DataFetched:"+o);
             // This code executes after we have received our data. The String object o holds
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
+            try {
+                JSONArray Jimmyarray = new JSONArray(o);
+                for(int i=0; i <9; i++) {
+                    Log.d("brom", "element 0:" + Jimmyarray.get(i).toString());
+                }
+            } catch (JSONException e) {
+                Log.e("brom","E:"+e.getMessage());
+            }
 
             // Implement a parsing code that loops through the entire JSON and creates objects
             // of our newly created Mountain class.
