@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
     // Create ArrayLists from the raw data above and use these lists when populating your ListView.
     // skapaper en arraylist som heter listData
     private ArrayList<String> listData;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<Mountain> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,23 +57,43 @@ public class MainActivity extends AppCompatActivity {
         new FetchData().execute();
         // Ger listData värdet av arrayen mountainNames
         listData=new ArrayList<>(Arrays.asList(mountainNames));
-        adapter=new ArrayAdapter<String>(this,R.layout.list_item_textview,R.id.list_item_textview, listData);
+        adapter=new ArrayAdapter<Mountain>(this,R.layout.list_item_textview,R.id.list_item_textview);
+
 
         // kopplar arrayen med listView
-       /* ListView my_listview=(ListView) findViewById(R.id.my_listview);
+        ListView my_listview=(ListView) findViewById(R.id.my_listview);
         my_listview.setAdapter(adapter);
 
         my_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // skaper en variabel som hämtar data från arrayerna efter värdet på i
-                String temp = ""    + mountainNames[i] + " "
-                        + mountainLocations[i] + " "
-                        + mountainHeights[i];
+                String temp = adapter.getItem(i).info();
                 Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id =item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_refresh){
+            new FetchData().execute();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     private class FetchData extends AsyncTask<Void,Void,String>{
         @Override
@@ -139,9 +163,19 @@ public class MainActivity extends AppCompatActivity {
             // This code executes after we have received our data. The String object o holds
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
             try {
-                JSONArray Jimmyarray = new JSONArray(o);
-                for(int i=0; i < Jimmyarray.length(); i++) {
-                    Log.d("brom", "element 0:" + Jimmyarray.get(i).toString());
+
+                JSONArray jimmyarray = new JSONArray(o);
+                for(int i=0; i < jimmyarray.length(); i++) {
+                    Log.d("brom", "element 0:" + jimmyarray.get(i).toString());
+                    JSONObject jimmy1 = jimmyarray.getJSONObject(i);
+                    Log.d("brom",  jimmy1.getString("name"));
+                    Log.d("brom",  jimmy1.getString("location"));
+                    Log.d("brom",  ""+jimmy1.getInt("size"));
+                    //Log.d("brom",  n.toString());
+
+                    Mountain m = new Mountain(jimmy1.getString("name"),jimmy1.getString("location"),jimmy1.getInt("size") );
+                    Log.d("brom",  m.toString());
+                    adapter.add(m);
                 }
             } catch (JSONException e) {
                 Log.e("brom","E:"+e.getMessage());

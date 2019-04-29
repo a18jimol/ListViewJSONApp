@@ -21,7 +21,7 @@ public class Mountain {
 
     public String info(){
         String tmp=new String();
-        tmp+=name+" is lacated in mountain range "+location+ "and reaches "+height+"m above sea level. ";
+        tmp+=name+" is located in " +location+ " and reaches "+height+"m above sea level. ";
         return tmp;
     }
 
