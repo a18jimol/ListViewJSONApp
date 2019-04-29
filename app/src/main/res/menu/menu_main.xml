@@ -3,11 +3,7 @@
     xmlns:app="http://schenas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.brom.listviewjsonapp.MainActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
